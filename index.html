@@ -1,0 +1,2805 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="FlowSync – The modern SaaS platform that streamlines your workflow, boosts team productivity, and scales with your business."
+    />
+    <meta name="theme-color" content="#6d28d9" />
+    <title>FlowSync – Supercharge Your Workflow</title>
+
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("fs-theme");
+          if (
+            t === "dark" ||
+            (!t && window.matchMedia("(prefers-color-scheme:dark)").matches)
+          ) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#f5f3ff",
+                100: "#ede9fe",
+                200: "#ddd6fe",
+                300: "#c4b5fd",
+                400: "#a78bfa",
+                500: "#8b5cf6",
+                600: "#7c3aed",
+                700: "#6d28d9",
+                800: "#5b21b6",
+                900: "#4c1d95",
+              },
+            },
+            fontFamily: { sans: ["Inter", "system-ui", "sans-serif"] },
+          },
+        },
+      };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+      .swiper-pagination-bullet-active {
+        background: #7c3aed !important;
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #7c3aed, #a78bfa, #38bdf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero-glow {
+        background: radial-gradient(
+          ellipse 80% 60% at 50% -10%,
+          rgba(124, 58, 237, 0.35) 0%,
+          transparent 70%
+        );
+      }
+      .dashboard-glow {
+        filter: drop-shadow(0 30px 60px rgba(124, 58, 237, 0.4));
+      }
+
+      #scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        background: linear-gradient(90deg, #7c3aed, #a78bfa, #38bdf8);
+        z-index: 9999;
+        will-change: width;
+        pointer-events: none;
+        transition: none;
+      }
+
+      .mesh-blob {
+        position: absolute;
+        border-radius: 9999px;
+        pointer-events: none;
+        filter: blur(52px);
+      }
+      .mesh-blob-1 {
+        width: 560px;
+        height: 560px;
+        top: -180px;
+        left: -80px;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.18) 0%,
+          transparent 65%
+        );
+      }
+      .mesh-blob-2 {
+        width: 480px;
+        height: 480px;
+        top: 40px;
+        right: -140px;
+        background: radial-gradient(
+          circle,
+          rgba(56, 189, 248, 0.14) 0%,
+          transparent 65%
+        );
+      }
+      .mesh-blob-3 {
+        width: 400px;
+        height: 400px;
+        bottom: 0;
+        left: 32%;
+        background: radial-gradient(
+          circle,
+          rgba(167, 139, 250, 0.12) 0%,
+          transparent 65%
+        );
+      }
+
+      .feature-card {
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        transform: translateZ(0);
+        will-change: transform;
+      }
+      .feature-card:hover {
+        transform: translateZ(0) translateY(-6px) scale(1.01);
+        box-shadow:
+          0 0 0 1px rgba(124, 58, 237, 0.25),
+          0 24px 48px -12px rgba(124, 58, 237, 0.22);
+      }
+      .feature-card:hover .card-icon {
+        transform: translateY(-3px) scale(1.12);
+      }
+      .card-icon {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        will-change: transform;
+      }
+
+      #sticky-cta {
+        transform: translateY(100%);
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 0.4s ease;
+      }
+      #sticky-cta.cta-visible {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      #chat-btn {
+        transition:
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.3s ease;
+        will-change: transform;
+      }
+      #chat-btn:hover {
+        transform: scale(1.1) translateY(-2px);
+        box-shadow: 0 20px 40px -8px rgba(124, 58, 237, 0.55);
+      }
+      #chat-btn:active {
+        transform: scale(0.97);
+      }
+      #chat-btn:focus-visible {
+        outline: 3px solid rgba(124, 58, 237, 0.5);
+        outline-offset: 3px;
+      }
+
+      @keyframes count-in {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .counter-animate {
+        animation: count-in 0.5s ease forwards;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased"
+    x-data="{
+    darkMode: document.documentElement.classList.contains('dark'),
+    toggleDark(){
+      this.darkMode=!this.darkMode;
+      if(this.darkMode){
+        document.documentElement.classList.add('dark');
+        try{localStorage.setItem('fs-theme','dark')}catch(e){}
+      }else{
+        document.documentElement.classList.remove('dark');
+        try{localStorage.setItem('fs-theme','light')}catch(e){}
+      }
+    }
+  }"
+  >
+    <div
+      id="scroll-progress"
+      role="progressbar"
+      aria-label="Page reading progress"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+    ></div>
+
+    <header
+      x-data="{open:false,scrolled:false}"
+      @scroll.window="scrolled=window.scrollY>20"
+      :class="scrolled?'bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl shadow-sm shadow-black/5':'bg-transparent'"
+      class="fixed top-0 inset-x-0 z-50 transition-all duration-300"
+      role="banner"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav
+          class="flex items-center justify-between h-16 lg:h-20"
+          aria-label="Primary navigation"
+        >
+          <a
+            href="#"
+            class="flex items-center gap-2.5 flex-shrink-0"
+            aria-label="FlowSync Home"
+          >
+            <div
+              class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center"
+              aria-hidden="true"
+            >
+              <i data-lucide="zap" class="w-4 h-4 text-white"></i>
+            </div>
+            <span class="text-xl font-bold tracking-tight"
+              >Flow<span class="text-primary-600">Sync</span></span
+            >
+          </a>
+
+          <ul class="hidden lg:flex items-center gap-8" role="list">
+            <li>
+              <a
+                href="#features"
+                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >Features</a
+              >
+            </li>
+            <li>
+              <a
+                href="#how-it-works"
+                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >How It Works</a
+              >
+            </li>
+            <li>
+              <a
+                href="#pricing"
+                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >Pricing</a
+              >
+            </li>
+            <li>
+              <a
+                href="#testimonials"
+                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >Testimonials</a
+              >
+            </li>
+            <li>
+              <a
+                href="#faq"
+                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >FAQ</a
+              >
+            </li>
+          </ul>
+
+          <div class="hidden lg:flex items-center gap-4">
+            <button
+              @click="toggleDark()"
+              class="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              :aria-label="darkMode?'Switch to light mode':'Switch to dark mode'"
+              :aria-pressed="darkMode.toString()"
+            >
+              <i
+                x-show="!darkMode"
+                data-lucide="moon"
+                class="w-4 h-4"
+                aria-hidden="true"
+              ></i>
+              <i
+                x-show="darkMode"
+                x-cloak
+                data-lucide="sun"
+                class="w-4 h-4"
+                aria-hidden="true"
+              ></i>
+            </button>
+            <a
+              href="#"
+              class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              >Sign in</a
+            >
+            <a
+              href="#pricing"
+              class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-primary-600/30 hover:-translate-y-0.5"
+            >
+              Start Free Trial
+              <i
+                data-lucide="arrow-right"
+                class="w-4 h-4"
+                aria-hidden="true"
+              ></i>
+            </a>
+          </div>
+
+          <button
+            @click="open=!open"
+            class="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            :aria-expanded="open.toString()"
+            aria-label="Toggle mobile menu"
+            aria-controls="mobile-menu"
+          >
+            <i
+              x-show="!open"
+              data-lucide="menu"
+              class="w-5 h-5"
+              aria-hidden="true"
+            ></i>
+            <i
+              x-show="open"
+              x-cloak
+              data-lucide="x"
+              class="w-5 h-5"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </nav>
+      </div>
+
+      <div
+        id="mobile-menu"
+        x-show="open"
+        x-cloak
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+        class="lg:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950"
+      >
+        <ul class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1" role="list">
+          <li>
+            <a
+              href="#features"
+              @click="open=false"
+              class="block px-4 py-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >Features</a
+            >
+          </li>
+          <li>
+            <a
+              href="#how-it-works"
+              @click="open=false"
+              class="block px-4 py-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >How It Works</a
+            >
+          </li>
+          <li>
+            <a
+              href="#pricing"
+              @click="open=false"
+              class="block px-4 py-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >Pricing</a
+            >
+          </li>
+          <li>
+            <a
+              href="#testimonials"
+              @click="open=false"
+              class="block px-4 py-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >Testimonials</a
+            >
+          </li>
+          <li>
+            <a
+              href="#faq"
+              @click="open=false"
+              class="block px-4 py-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >FAQ</a
+            >
+          </li>
+          <li
+            class="flex items-center gap-3 pt-3 mt-2 border-t border-gray-100 dark:border-gray-800"
+          >
+            <a
+              href="#pricing"
+              @click="open=false"
+              class="flex-1 text-center bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-5 py-3 rounded-xl transition-all"
+              >Start Free Trial</a
+            >
+            <button
+              @click="toggleDark()"
+              class="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-xl border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              :aria-label="darkMode?'Switch to light mode':'Switch to dark mode'"
+            >
+              <i
+                x-show="!darkMode"
+                data-lucide="moon"
+                class="w-4 h-4"
+                aria-hidden="true"
+              ></i>
+              <i
+                x-show="darkMode"
+                x-cloak
+                data-lucide="sun"
+                class="w-4 h-4"
+                aria-hidden="true"
+              ></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <main>
+      <section
+        class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden"
+        aria-labelledby="hero-headline"
+      >
+        <div
+          class="hero-glow absolute inset-0 pointer-events-none"
+          aria-hidden="true"
+        ></div>
+        <div class="mesh-blob mesh-blob-1" aria-hidden="true"></div>
+        <div class="mesh-blob mesh-blob-2" aria-hidden="true"></div>
+        <div class="mesh-blob mesh-blob-3" aria-hidden="true"></div>
+        <div
+          class="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"
+          aria-hidden="true"
+        ></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-4xl mx-auto">
+            <div
+              data-aos="fade-down"
+              data-aos-duration="600"
+              class="inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-xs font-semibold px-4 py-2 rounded-full mb-8"
+            >
+              <i
+                data-lucide="sparkles"
+                class="w-3.5 h-3.5"
+                aria-hidden="true"
+              ></i>
+              New: AI-powered automation is here
+              <i
+                data-lucide="arrow-right"
+                class="w-3 h-3"
+                aria-hidden="true"
+              ></i>
+            </div>
+
+            <h1
+              id="hero-headline"
+              data-aos="fade-up"
+              data-aos-duration="700"
+              data-aos-delay="100"
+              class="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6"
+            >
+              The smarter way to<br />
+              <span class="gradient-text">run your business</span>
+            </h1>
+
+            <p
+              data-aos="fade-up"
+              data-aos-duration="700"
+              data-aos-delay="200"
+              class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto mb-10"
+            >
+              FlowSync unifies your team's projects, automations, and analytics
+              into one powerful workspace — so you can move faster and ship
+              more.
+            </p>
+
+            <div
+              data-aos="fade-up"
+              data-aos-duration="700"
+              data-aos-delay="300"
+              class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+            >
+              <a
+                href="#pricing"
+                class="group inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:shadow-xl hover:shadow-primary-600/40 hover:-translate-y-1 w-full sm:w-auto justify-center"
+              >
+                Start for free — no card needed
+                <i
+                  data-lucide="arrow-right"
+                  class="w-4 h-4 transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                ></i>
+              </a>
+              <a
+                href="#"
+                class="group inline-flex items-center gap-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 font-semibold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:border-primary-400 hover:shadow-lg hover:-translate-y-1 w-full sm:w-auto justify-center"
+              >
+                <i
+                  data-lucide="play-circle"
+                  class="w-5 h-5 text-primary-600"
+                  aria-hidden="true"
+                ></i>
+                Watch demo
+              </a>
+            </div>
+
+            <div
+              data-aos="fade-up"
+              data-aos-duration="700"
+              data-aos-delay="400"
+              class="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-500 dark:text-gray-400 mb-16"
+            >
+              <div class="flex items-center gap-2">
+                <div class="flex -space-x-1.5" aria-hidden="true">
+                  <div
+                    class="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 border-2 border-white dark:border-gray-950"
+                  ></div>
+                  <div
+                    class="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 border-2 border-white dark:border-gray-950"
+                  ></div>
+                  <div
+                    class="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 border-2 border-white dark:border-gray-950"
+                  ></div>
+                </div>
+                <span
+                  ><strong class="text-gray-900 dark:text-white"
+                    >12,000+</strong
+                  >
+                  teams trust us</span
+                >
+              </div>
+              <div class="flex items-center gap-1.5">
+                <div class="flex gap-0.5" role="img" aria-label="5 star rating">
+                  <i
+                    data-lucide="star"
+                    class="w-4 h-4 fill-amber-400 text-amber-400"
+                    aria-hidden="true"
+                  ></i>
+                  <i
+                    data-lucide="star"
+                    class="w-4 h-4 fill-amber-400 text-amber-400"
+                    aria-hidden="true"
+                  ></i>
+                  <i
+                    data-lucide="star"
+                    class="w-4 h-4 fill-amber-400 text-amber-400"
+                    aria-hidden="true"
+                  ></i>
+                  <i
+                    data-lucide="star"
+                    class="w-4 h-4 fill-amber-400 text-amber-400"
+                    aria-hidden="true"
+                  ></i>
+                  <i
+                    data-lucide="star"
+                    class="w-4 h-4 fill-amber-400 text-amber-400"
+                    aria-hidden="true"
+                  ></i>
+                </div>
+                <span
+                  ><strong class="text-gray-900 dark:text-white">4.9/5</strong>
+                  from 2,400 reviews</span
+                >
+              </div>
+              <div class="flex items-center gap-2">
+                <i
+                  data-lucide="shield-check"
+                  class="w-4 h-4 text-green-500"
+                  aria-hidden="true"
+                ></i>
+                <span>SOC 2 Type II certified</span>
+              </div>
+            </div>
+
+            <div
+              data-aos="fade-up"
+              data-aos-duration="900"
+              data-aos-delay="500"
+              class="relative"
+            >
+              <div
+                class="dashboard-glow rounded-2xl overflow-hidden border border-gray-200/50 dark:border-white/10 shadow-2xl"
+              >
+                <div class="bg-gray-900 rounded-2xl overflow-hidden">
+                  <div
+                    class="flex items-center gap-2 px-4 py-3 bg-gray-800/80 border-b border-gray-700/50"
+                    aria-hidden="true"
+                  >
+                    <div class="flex gap-1.5">
+                      <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                      <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                      <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div
+                      class="flex-1 mx-4 bg-gray-700/60 rounded-md h-6 flex items-center px-3"
+                    >
+                      <span class="text-xs text-gray-400 font-mono"
+                        >app.flowsync.io/dashboard</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="p-6 bg-gray-950 grid grid-cols-12 gap-4 min-h-[340px] sm:min-h-[420px]"
+                    aria-hidden="true"
+                  >
+                    <div class="col-span-2 hidden sm:flex flex-col gap-3">
+                      <div class="h-4 bg-primary-600/40 rounded-md w-3/4"></div>
+                      <div class="flex flex-col gap-2 mt-2">
+                        <div
+                          class="h-8 bg-primary-600/20 rounded-lg flex items-center gap-2 px-2"
+                        >
+                          <div class="w-3 h-3 rounded bg-primary-500/60"></div>
+                          <div class="h-2 bg-gray-600 rounded flex-1"></div>
+                        </div>
+                        <div
+                          class="h-8 bg-white/5 rounded-lg flex items-center gap-2 px-2"
+                        >
+                          <div class="w-3 h-3 rounded bg-gray-600"></div>
+                          <div class="h-2 bg-gray-700 rounded flex-1"></div>
+                        </div>
+                        <div
+                          class="h-8 bg-white/5 rounded-lg flex items-center gap-2 px-2"
+                        >
+                          <div class="w-3 h-3 rounded bg-gray-600"></div>
+                          <div class="h-2 bg-gray-700 rounded flex-1"></div>
+                        </div>
+                        <div
+                          class="h-8 bg-white/5 rounded-lg flex items-center gap-2 px-2"
+                        >
+                          <div class="w-3 h-3 rounded bg-gray-600"></div>
+                          <div class="h-2 bg-gray-700 rounded flex-1"></div>
+                        </div>
+                        <div
+                          class="h-8 bg-white/5 rounded-lg flex items-center gap-2 px-2"
+                        >
+                          <div class="w-3 h-3 rounded bg-gray-600"></div>
+                          <div class="h-2 bg-gray-700 rounded flex-1"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="col-span-12 sm:col-span-10 grid grid-cols-3 gap-4"
+                    >
+                      <div
+                        class="bg-gradient-to-br from-primary-600/30 to-primary-800/20 border border-primary-500/20 rounded-xl p-4"
+                      >
+                        <div
+                          class="h-2 w-16 bg-primary-400/40 rounded mb-3"
+                        ></div>
+                        <div
+                          class="h-7 w-20 bg-primary-400/60 rounded mb-1"
+                        ></div>
+                        <div class="h-2 w-12 bg-primary-400/20 rounded"></div>
+                      </div>
+                      <div
+                        class="bg-white/5 border border-white/10 rounded-xl p-4"
+                      >
+                        <div class="h-2 w-16 bg-gray-600 rounded mb-3"></div>
+                        <div class="h-7 w-20 bg-gray-500 rounded mb-1"></div>
+                        <div class="h-2 w-12 bg-gray-700 rounded"></div>
+                      </div>
+                      <div
+                        class="bg-white/5 border border-white/10 rounded-xl p-4"
+                      >
+                        <div class="h-2 w-16 bg-gray-600 rounded mb-3"></div>
+                        <div class="h-7 w-20 bg-gray-500 rounded mb-1"></div>
+                        <div class="h-2 w-12 bg-gray-700 rounded"></div>
+                      </div>
+                      <div
+                        class="col-span-2 bg-white/5 border border-white/10 rounded-xl p-4"
+                      >
+                        <div class="h-2 w-24 bg-gray-600 rounded mb-4"></div>
+                        <div class="flex items-end gap-1.5 h-24">
+                          <div
+                            class="flex-1 bg-primary-600/30 rounded-t-sm h-[40%]"
+                          ></div>
+                          <div
+                            class="flex-1 bg-primary-600/30 rounded-t-sm h-[65%]"
+                          ></div>
+                          <div
+                            class="flex-1 bg-primary-600/30 rounded-t-sm h-[45%]"
+                          ></div>
+                          <div
+                            class="flex-1 bg-primary-600/60 rounded-t-sm h-[80%]"
+                          ></div>
+                          <div
+                            class="flex-1 bg-primary-600/60 rounded-t-sm h-[70%]"
+                          ></div>
+                          <div
+                            class="flex-1 bg-primary-600 rounded-t-sm h-[95%]"
+                          ></div>
+                          <div
+                            class="flex-1 bg-primary-600 rounded-t-sm h-[85%]"
+                          ></div>
+                        </div>
+                      </div>
+                      <div
+                        class="bg-white/5 border border-white/10 rounded-xl p-4"
+                      >
+                        <div class="h-2 w-16 bg-gray-600 rounded mb-4"></div>
+                        <div class="flex flex-col gap-2.5">
+                          <div class="flex items-center gap-2">
+                            <div
+                              class="w-3 h-3 rounded-full bg-green-500 flex-shrink-0"
+                            ></div>
+                            <div class="h-2 bg-gray-600 rounded flex-1"></div>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <div
+                              class="w-3 h-3 rounded-full bg-green-500 flex-shrink-0"
+                            ></div>
+                            <div class="h-2 bg-gray-600 rounded flex-1"></div>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <div
+                              class="w-3 h-3 rounded-full bg-primary-500 flex-shrink-0"
+                            ></div>
+                            <div class="h-2 bg-gray-600 rounded flex-1"></div>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <div
+                              class="w-3 h-3 rounded-full border border-gray-500 flex-shrink-0"
+                            ></div>
+                            <div class="h-2 bg-gray-700 rounded flex-1"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="absolute -bottom-4 -left-4 sm:-left-8 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-3 shadow-xl flex items-center gap-3"
+                aria-hidden="true"
+              >
+                <div
+                  class="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900/40 flex items-center justify-center flex-shrink-0"
+                >
+                  <i
+                    data-lucide="trending-up"
+                    class="w-4 h-4 text-green-600 dark:text-green-400"
+                  ></i>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    Revenue this month
+                  </div>
+                  <div class="text-sm font-bold text-gray-900 dark:text-white">
+                    ↑ 32% vs last month
+                  </div>
+                </div>
+              </div>
+              <div
+                class="absolute -top-4 -right-4 sm:-right-8 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-3 shadow-xl flex items-center gap-3"
+                aria-hidden="true"
+              >
+                <div
+                  class="w-9 h-9 rounded-lg bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center flex-shrink-0"
+                >
+                  <i
+                    data-lucide="users"
+                    class="w-4 h-4 text-primary-600 dark:text-primary-400"
+                  ></i>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    Active users
+                  </div>
+                  <div class="text-sm font-bold text-gray-900 dark:text-white">
+                    8,492 online now
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="py-16 border-y border-gray-100 dark:border-gray-800/50"
+        aria-label="Trusted by leading companies"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p
+            data-aos="fade-up"
+            class="text-center text-sm font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-10"
+          >
+            Trusted by 12,000+ companies worldwide
+          </p>
+          <div
+            data-aos="fade-up"
+            data-aos-delay="100"
+            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center"
+          >
+            <div
+              class="flex items-center gap-2 opacity-50 dark:opacity-30 hover:opacity-80 dark:hover:opacity-60 transition-opacity grayscale"
+            >
+              <i data-lucide="layers" class="w-5 h-5" aria-hidden="true"></i
+              ><span class="font-bold text-gray-600 dark:text-gray-300 text-sm"
+                >Acmelabs</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-2 opacity-50 dark:opacity-30 hover:opacity-80 dark:hover:opacity-60 transition-opacity grayscale"
+            >
+              <i data-lucide="cpu" class="w-5 h-5" aria-hidden="true"></i
+              ><span class="font-bold text-gray-600 dark:text-gray-300 text-sm"
+                >Techwave</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-2 opacity-50 dark:opacity-30 hover:opacity-80 dark:hover:opacity-60 transition-opacity grayscale"
+            >
+              <i data-lucide="globe" class="w-5 h-5" aria-hidden="true"></i
+              ><span class="font-bold text-gray-600 dark:text-gray-300 text-sm"
+                >Orbitex</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-2 opacity-50 dark:opacity-30 hover:opacity-80 dark:hover:opacity-60 transition-opacity grayscale"
+            >
+              <i data-lucide="triangle" class="w-5 h-5" aria-hidden="true"></i
+              ><span class="font-bold text-gray-600 dark:text-gray-300 text-sm"
+                >Prismio</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-2 opacity-50 dark:opacity-30 hover:opacity-80 dark:hover:opacity-60 transition-opacity grayscale"
+            >
+              <i data-lucide="hexagon" class="w-5 h-5" aria-hidden="true"></i
+              ><span class="font-bold text-gray-600 dark:text-gray-300 text-sm"
+                >Nexlify</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-2 opacity-50 dark:opacity-30 hover:opacity-80 dark:hover:opacity-60 transition-opacity grayscale"
+            >
+              <i data-lucide="box" class="w-5 h-5" aria-hidden="true"></i
+              ><span class="font-bold text-gray-600 dark:text-gray-300 text-sm"
+                >Cubeworks</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="metrics" class="py-16" aria-labelledby="metrics-heading">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 id="metrics-heading" class="sr-only">Key metrics</h2>
+          <dl class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div class="text-center" data-aos="fade-up" data-aos-delay="0">
+              <dd
+                class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 counter-value"
+                data-target="12000"
+                data-suffix="+"
+                data-duration="1800"
+              >
+                0
+              </dd>
+              <dt
+                class="text-sm font-semibold text-gray-500 dark:text-gray-400"
+              >
+                Teams worldwide
+              </dt>
+            </div>
+            <div class="text-center" data-aos="fade-up" data-aos-delay="80">
+              <dd
+                class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 counter-value"
+                data-target="4200000"
+                data-suffix="+"
+                data-format="compact"
+                data-duration="2000"
+              >
+                0
+              </dd>
+              <dt
+                class="text-sm font-semibold text-gray-500 dark:text-gray-400"
+              >
+                Tasks automated daily
+              </dt>
+            </div>
+            <div class="text-center" data-aos="fade-up" data-aos-delay="160">
+              <dd
+                class="text-4xl lg:text-5xl font-black text-primary-600 mb-2 counter-value"
+                data-target="57"
+                data-suffix="%"
+                data-duration="1600"
+              >
+                0
+              </dd>
+              <dt
+                class="text-sm font-semibold text-gray-500 dark:text-gray-400"
+              >
+                Avg. cycle time reduction
+              </dt>
+            </div>
+            <div class="text-center" data-aos="fade-up" data-aos-delay="240">
+              <dd
+                class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 counter-value"
+                data-target="4.9"
+                data-suffix="/5"
+                data-decimals="1"
+                data-duration="1400"
+              >
+                0
+              </dd>
+              <dt
+                class="text-sm font-semibold text-gray-500 dark:text-gray-400"
+              >
+                Customer satisfaction
+              </dt>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section
+        id="features"
+        class="py-24 lg:py-32"
+        aria-labelledby="features-heading"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <div
+              data-aos="fade-up"
+              class="inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-semibold px-4 py-2 rounded-full mb-5"
+            >
+              <i data-lucide="star" class="w-3.5 h-3.5" aria-hidden="true"></i>
+              Everything you need
+            </div>
+            <h2
+              id="features-heading"
+              data-aos="fade-up"
+              data-aos-delay="100"
+              class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
+            >
+              Built for the way
+              <span class="gradient-text">teams actually work</span>
+            </h2>
+            <p
+              data-aos="fade-up"
+              data-aos-delay="200"
+              class="text-lg text-gray-600 dark:text-gray-400"
+            >
+              Stop context-switching between tools. FlowSync brings everything
+              into one intelligent workspace designed for speed.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article
+              data-aos="fade-up"
+              data-aos-delay="0"
+              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+            >
+              <div
+                class="card-icon w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center mb-5"
+              >
+                <i
+                  data-lucide="zap"
+                  class="w-6 h-6 text-primary-600 dark:text-primary-400"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <h3 class="text-lg font-bold mb-2">Smart Automation</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+              >
+                Build no-code automation workflows that trigger across your
+                entire stack — without writing a single line of code.
+              </p>
+            </article>
+
+            <article
+              data-aos="fade-up"
+              data-aos-delay="80"
+              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+            >
+              <div
+                class="card-icon w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/40 flex items-center justify-center mb-5"
+              >
+                <i
+                  data-lucide="bar-chart-2"
+                  class="w-6 h-6 text-blue-600 dark:text-blue-400"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <h3 class="text-lg font-bold mb-2">Real-time Analytics</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+              >
+                Track every metric that matters with live dashboards, custom
+                reports, and AI-generated insights you can act on.
+              </p>
+            </article>
+
+            <article
+              data-aos="fade-up"
+              data-aos-delay="160"
+              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+            >
+              <div
+                class="card-icon w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/40 flex items-center justify-center mb-5"
+              >
+                <i
+                  data-lucide="users"
+                  class="w-6 h-6 text-green-600 dark:text-green-400"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <h3 class="text-lg font-bold mb-2">Team Collaboration</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+              >
+                Comment, assign, mention, and collaborate in context — right
+                where the work happens, not in a separate chat app.
+              </p>
+            </article>
+
+            <article
+              data-aos="fade-up"
+              data-aos-delay="0"
+              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+            >
+              <div
+                class="card-icon w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/40 flex items-center justify-center mb-5"
+              >
+                <i
+                  data-lucide="shield"
+                  class="w-6 h-6 text-amber-600 dark:text-amber-400"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <h3 class="text-lg font-bold mb-2">Enterprise Security</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+              >
+                SOC 2, SSO, RBAC, audit logs, and data residency controls —
+                security features built for enterprise compliance.
+              </p>
+            </article>
+
+            <article
+              data-aos="fade-up"
+              data-aos-delay="80"
+              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+            >
+              <div
+                class="card-icon w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-900/40 flex items-center justify-center mb-5"
+              >
+                <i
+                  data-lucide="plug"
+                  class="w-6 h-6 text-rose-600 dark:text-rose-400"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <h3 class="text-lg font-bold mb-2">200+ Integrations</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+              >
+                Connect Slack, GitHub, Salesforce, HubSpot, Notion, and 200 more
+                tools via native integrations and Zapier.
+              </p>
+            </article>
+
+            <article
+              data-aos="fade-up"
+              data-aos-delay="160"
+              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+            >
+              <div
+                class="card-icon w-12 h-12 rounded-xl bg-cyan-50 dark:bg-cyan-900/40 flex items-center justify-center mb-5"
+              >
+                <i
+                  data-lucide="cpu"
+                  class="w-6 h-6 text-cyan-600 dark:text-cyan-400"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <h3 class="text-lg font-bold mb-2">AI Co-pilot</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+              >
+                Let our AI write summaries, suggest next steps, draft replies,
+                and surface blockers before they slow your team down.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="how-it-works"
+        class="py-24 lg:py-32 bg-gray-50 dark:bg-gray-900/50"
+        aria-labelledby="how-heading"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-2xl mx-auto mb-20">
+            <div
+              data-aos="fade-up"
+              class="inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-semibold px-4 py-2 rounded-full mb-5"
+            >
+              <i data-lucide="map" class="w-3.5 h-3.5" aria-hidden="true"></i>
+              Simple by design
+            </div>
+            <h2
+              id="how-heading"
+              data-aos="fade-up"
+              data-aos-delay="100"
+              class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
+            >
+              Up and running <span class="gradient-text">in minutes</span>
+            </h2>
+            <p
+              data-aos="fade-up"
+              data-aos-delay="200"
+              class="text-lg text-gray-600 dark:text-gray-400"
+            >
+              No lengthy onboarding. No setup headaches. Just sign in and start
+              shipping.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+            <div
+              class="hidden lg:block absolute top-16 left-1/3 right-1/3 h-0.5 bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200 dark:from-primary-900 dark:via-primary-600 dark:to-primary-900"
+              aria-hidden="true"
+            ></div>
+
+            <div
+              data-aos="fade-up"
+              data-aos-delay="0"
+              class="relative text-center"
+            >
+              <div
+                class="w-16 h-16 rounded-2xl bg-primary-600 text-white flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 text-2xl font-black"
+                aria-hidden="true"
+              >
+                1
+              </div>
+              <h3 class="text-xl font-bold mb-3">Create your workspace</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-xs mx-auto"
+              >
+                Sign up in 30 seconds. Invite your team and choose from
+                ready-made templates tailored to your industry.
+              </p>
+            </div>
+
+            <div
+              data-aos="fade-up"
+              data-aos-delay="150"
+              class="relative text-center"
+            >
+              <div
+                class="w-16 h-16 rounded-2xl bg-primary-600 text-white flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 text-2xl font-black"
+                aria-hidden="true"
+              >
+                2
+              </div>
+              <h3 class="text-xl font-bold mb-3">Connect your tools</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-xs mx-auto"
+              >
+                Link your existing apps in one click. FlowSync syncs data
+                automatically so there's no manual import.
+              </p>
+            </div>
+
+            <div
+              data-aos="fade-up"
+              data-aos-delay="300"
+              class="relative text-center"
+            >
+              <div
+                class="w-16 h-16 rounded-2xl bg-primary-600 text-white flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 text-2xl font-black"
+                aria-hidden="true"
+              >
+                3
+              </div>
+              <h3 class="text-xl font-bold mb-3">Ship faster than ever</h3>
+              <p
+                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-xs mx-auto"
+              >
+                With automation running in the background and AI insights
+                surfaced proactively, your team hits goals faster.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="showcase"
+        class="py-24 lg:py-32"
+        aria-labelledby="showcase-heading"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div
+              data-aos="fade-right"
+              data-aos-duration="800"
+              class="relative order-2 lg:order-1"
+            >
+              <div
+                class="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-2xl bg-gray-900 p-4"
+              >
+                <div
+                  class="rounded-xl overflow-hidden bg-gray-950 p-5"
+                  aria-hidden="true"
+                >
+                  <div class="grid grid-cols-3 gap-3 min-h-[300px]">
+                    <div class="bg-gray-800/50 rounded-xl p-3">
+                      <div
+                        class="text-xs font-semibold text-gray-400 mb-3 flex items-center justify-between"
+                      >
+                        To Do
+                        <span
+                          class="bg-gray-700 text-gray-300 text-xs rounded-full px-2 py-0.5"
+                          >4</span
+                        >
+                      </div>
+                      <div class="flex flex-col gap-2">
+                        <div class="bg-gray-800 rounded-lg p-3">
+                          <div
+                            class="h-2 bg-gray-600 rounded w-full mb-2"
+                          ></div>
+                          <div class="h-2 bg-gray-700 rounded w-2/3"></div>
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-3">
+                          <div
+                            class="h-2 bg-gray-600 rounded w-full mb-2"
+                          ></div>
+                          <div class="h-2 bg-gray-700 rounded w-4/5"></div>
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-3">
+                          <div
+                            class="h-2 bg-gray-600 rounded w-full mb-2"
+                          ></div>
+                          <div class="h-2 bg-gray-700 rounded w-1/2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="bg-primary-900/20 border border-primary-800/30 rounded-xl p-3"
+                    >
+                      <div
+                        class="text-xs font-semibold text-primary-400 mb-3 flex items-center justify-between"
+                      >
+                        In Progress
+                        <span
+                          class="bg-primary-800/50 text-primary-300 text-xs rounded-full px-2 py-0.5"
+                          >2</span
+                        >
+                      </div>
+                      <div class="flex flex-col gap-2">
+                        <div
+                          class="bg-primary-900/30 border border-primary-700/30 rounded-lg p-3"
+                        >
+                          <div
+                            class="h-2 bg-primary-600/60 rounded w-full mb-2"
+                          ></div>
+                          <div
+                            class="h-2 bg-primary-700/40 rounded w-3/4"
+                          ></div>
+                          <div class="mt-2 flex gap-1">
+                            <div
+                              class="w-4 h-4 rounded-full bg-primary-500/60"
+                            ></div>
+                            <div
+                              class="w-4 h-4 rounded-full bg-blue-500/60"
+                            ></div>
+                          </div>
+                        </div>
+                        <div
+                          class="bg-primary-900/30 border border-primary-700/30 rounded-lg p-3"
+                        >
+                          <div
+                            class="h-2 bg-primary-600/60 rounded w-full mb-2"
+                          ></div>
+                          <div
+                            class="h-2 bg-primary-700/40 rounded w-1/2"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bg-green-900/10 rounded-xl p-3">
+                      <div
+                        class="text-xs font-semibold text-green-400 mb-3 flex items-center justify-between"
+                      >
+                        Done
+                        <span
+                          class="bg-green-800/40 text-green-300 text-xs rounded-full px-2 py-0.5"
+                          >6</span
+                        >
+                      </div>
+                      <div class="flex flex-col gap-2">
+                        <div class="bg-gray-800 rounded-lg p-3 opacity-60">
+                          <div
+                            class="h-2 bg-gray-600 rounded w-full mb-2"
+                          ></div>
+                          <div class="h-2 bg-gray-700 rounded w-2/3"></div>
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-3 opacity-60">
+                          <div
+                            class="h-2 bg-gray-600 rounded w-full mb-2"
+                          ></div>
+                          <div class="h-2 bg-gray-700 rounded w-4/5"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-full px-5 py-2.5 shadow-lg flex items-center gap-2 whitespace-nowrap"
+                aria-hidden="true"
+              >
+                <i
+                  data-lucide="check-circle"
+                  class="w-4 h-4 text-green-500"
+                ></i>
+                <span
+                  class="text-sm font-semibold text-gray-900 dark:text-white"
+                  >Sprint completed 2 days early</span
+                >
+                <span class="text-2xl" aria-hidden="true">🎉</span>
+              </div>
+            </div>
+
+            <div class="order-1 lg:order-2">
+              <div data-aos="fade-left" data-aos-duration="800">
+                <div
+                  class="inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-semibold px-4 py-2 rounded-full mb-6"
+                >
+                  <i
+                    data-lucide="layout-kanban"
+                    class="w-3.5 h-3.5"
+                    aria-hidden="true"
+                  ></i>
+                  Project management
+                </div>
+                <h2
+                  id="showcase-heading"
+                  class="text-4xl sm:text-5xl font-black tracking-tight mb-6 leading-tight"
+                >
+                  Visualize your work,
+                  <span class="gradient-text">ship on time</span>
+                </h2>
+                <p
+                  class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8"
+                >
+                  Flexible boards, timelines, and Gantt views adapt to how your
+                  team thinks — not the other way around. Drag, drop, and ship.
+                </p>
+
+                <ul class="flex flex-col gap-4 mb-10">
+                  <li class="flex items-start gap-3">
+                    <div
+                      class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-0.5"
+                      aria-hidden="true"
+                    >
+                      <i
+                        data-lucide="check"
+                        class="w-3.5 h-3.5 text-primary-600 dark:text-primary-400"
+                      ></i>
+                    </div>
+                    <div>
+                      <span class="font-semibold text-gray-900 dark:text-white"
+                        >Customizable views</span
+                      >
+                      <p
+                        class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"
+                      >
+                        Switch between Kanban, Table, Timeline, and Calendar
+                        views instantly.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <div
+                      class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-0.5"
+                      aria-hidden="true"
+                    >
+                      <i
+                        data-lucide="check"
+                        class="w-3.5 h-3.5 text-primary-600 dark:text-primary-400"
+                      ></i>
+                    </div>
+                    <div>
+                      <span class="font-semibold text-gray-900 dark:text-white"
+                        >AI sprint planning</span
+                      >
+                      <p
+                        class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"
+                      >
+                        Let AI estimate task complexity and auto-assign work
+                        based on team velocity.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <div
+                      class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-0.5"
+                      aria-hidden="true"
+                    >
+                      <i
+                        data-lucide="check"
+                        class="w-3.5 h-3.5 text-primary-600 dark:text-primary-400"
+                      ></i>
+                    </div>
+                    <div>
+                      <span class="font-semibold text-gray-900 dark:text-white"
+                        >Dependency tracking</span
+                      >
+                      <p
+                        class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"
+                      >
+                        Map blockers visually and get alerts before delays
+                        cascade across the project.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+
+                <a
+                  href="#pricing"
+                  class="group inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-primary-600/30 hover:-translate-y-0.5"
+                >
+                  Explore project tools
+                  <i
+                    data-lucide="arrow-right"
+                    class="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    aria-hidden="true"
+                  ></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="pricing"
+        class="py-24 lg:py-32 bg-gray-50 dark:bg-gray-900/50"
+        aria-labelledby="pricing-heading"
+        x-data="{annual:true}"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-2xl mx-auto mb-16">
+            <div
+              data-aos="fade-up"
+              class="inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-semibold px-4 py-2 rounded-full mb-5"
+            >
+              <i data-lucide="tag" class="w-3.5 h-3.5" aria-hidden="true"></i>
+              Simple pricing
+            </div>
+            <h2
+              id="pricing-heading"
+              data-aos="fade-up"
+              data-aos-delay="100"
+              class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
+            >
+              Invest in your team's
+              <span class="gradient-text">productivity</span>
+            </h2>
+            <p
+              data-aos="fade-up"
+              data-aos-delay="200"
+              class="text-lg text-gray-600 dark:text-gray-400 mb-8"
+            >
+              14-day free trial. No credit card required. Cancel anytime.
+            </p>
+
+            <div
+              data-aos="fade-up"
+              data-aos-delay="300"
+              class="inline-flex items-center gap-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-1.5"
+              role="group"
+              aria-label="Billing period selection"
+            >
+              <button
+                @click="annual=false"
+                :class="!annual?'bg-primary-600 text-white shadow-sm':'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'"
+                class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200"
+                :aria-pressed="(!annual).toString()"
+              >
+                Monthly
+              </button>
+              <button
+                @click="annual=true"
+                :class="annual?'bg-primary-600 text-white shadow-sm':'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'"
+                class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2"
+                :aria-pressed="annual.toString()"
+              >
+                Annual
+                <span
+                  class="bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 text-xs font-bold px-2 py-0.5 rounded-full"
+                  >Save 30%</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+            <div
+              data-aos="fade-up"
+              data-aos-delay="0"
+              class="feature-card bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 flex flex-col"
+            >
+              <div class="mb-8">
+                <h3
+                  class="text-sm font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4"
+                >
+                  Starter
+                </h3>
+                <div class="flex items-end gap-1 mb-2">
+                  <span
+                    class="text-5xl font-black text-gray-900 dark:text-white"
+                    x-text="annual?'$9':'$14'"
+                  ></span>
+                  <span class="text-gray-500 dark:text-gray-400 mb-2"
+                    >/mo per user</span
+                  >
+                </div>
+                <p
+                  x-show="annual"
+                  class="text-xs text-green-600 dark:text-green-400 font-medium"
+                >
+                  Billed $108/year · Save $72
+                </p>
+                <p x-show="!annual" x-cloak class="text-xs text-gray-400">
+                  Billed monthly
+                </p>
+                <p
+                  class="text-gray-600 dark:text-gray-400 text-sm mt-4 leading-relaxed"
+                >
+                  Perfect for small teams and solo creators getting started.
+                </p>
+              </div>
+              <ul class="flex flex-col gap-3 mb-8 flex-1">
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Up to 5 team members</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Unlimited projects</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >10 GB storage</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Core integrations (20+)</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Email support</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm text-gray-400">
+                  <i
+                    data-lucide="x"
+                    class="w-4 h-4 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span>AI features</span>
+                </li>
+                <li class="flex items-center gap-3 text-sm text-gray-400">
+                  <i
+                    data-lucide="x"
+                    class="w-4 h-4 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span>Advanced analytics</span>
+                </li>
+              </ul>
+              <a
+                href="#"
+                class="block text-center border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 font-semibold py-3.5 rounded-xl transition-all duration-200 text-sm"
+                >Get started free</a
+              >
+            </div>
+
+            <div
+              data-aos="fade-up"
+              data-aos-delay="100"
+              class="relative feature-card bg-primary-600 border-2 border-primary-500 rounded-2xl p-8 flex flex-col shadow-2xl shadow-primary-600/30"
+            >
+              <div
+                class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-orange-400 text-gray-900 text-xs font-black uppercase tracking-widest px-5 py-1.5 rounded-full shadow-lg whitespace-nowrap"
+              >
+                ✦ Most Popular
+              </div>
+              <div class="mb-8">
+                <h3
+                  class="text-sm font-semibold uppercase tracking-widest text-primary-200 mb-4"
+                >
+                  Pro
+                </h3>
+                <div class="flex items-end gap-1 mb-2">
+                  <span
+                    class="text-5xl font-black text-white"
+                    x-text="annual?'$29':'$39'"
+                  ></span>
+                  <span class="text-primary-200 mb-2">/mo per user</span>
+                </div>
+                <p x-show="annual" class="text-xs text-primary-200 font-medium">
+                  Billed $348/year · Save $132
+                </p>
+                <p x-show="!annual" x-cloak class="text-xs text-primary-200">
+                  Billed monthly
+                </p>
+                <p class="text-primary-100 text-sm mt-4 leading-relaxed">
+                  For growing teams who need the full power of FlowSync.
+                </p>
+              </div>
+              <ul class="flex flex-col gap-3 mb-8 flex-1">
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-white flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-white">Unlimited team members</span>
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-white flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-white">Unlimited projects</span>
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-white flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-white">100 GB storage</span>
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-white flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-white">200+ integrations</span>
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-white flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-white">AI co-pilot</span>
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-white flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-white">Advanced analytics</span>
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-white flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-white">Priority support</span>
+                </li>
+              </ul>
+              <a
+                href="#"
+                class="block text-center bg-white text-primary-700 hover:bg-gray-50 font-bold py-3.5 rounded-xl transition-all duration-200 text-sm hover:shadow-lg hover:-translate-y-0.5"
+                >Start free trial →</a
+              >
+            </div>
+
+            <div
+              data-aos="fade-up"
+              data-aos-delay="200"
+              class="feature-card bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 flex flex-col"
+            >
+              <div class="mb-8">
+                <h3
+                  class="text-sm font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4"
+                >
+                  Enterprise
+                </h3>
+                <div class="flex items-end gap-1 mb-2">
+                  <span
+                    class="text-5xl font-black text-gray-900 dark:text-white"
+                    >Custom</span
+                  >
+                </div>
+                <p class="text-xs text-gray-400 mt-1">
+                  Talk to sales for volume pricing
+                </p>
+                <p
+                  class="text-gray-600 dark:text-gray-400 text-sm mt-4 leading-relaxed"
+                >
+                  Tailored for large organizations with advanced security
+                  requirements.
+                </p>
+              </div>
+              <ul class="flex flex-col gap-3 mb-8 flex-1">
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Everything in Pro</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Unlimited storage</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >SSO / SAML</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Audit logs &amp; RBAC</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Data residency options</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >SLA &amp; dedicated CSM</span
+                  >
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <i
+                    data-lucide="check"
+                    class="w-4 h-4 text-primary-600 flex-shrink-0"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="text-gray-700 dark:text-gray-300"
+                    >Custom AI model training</span
+                  >
+                </li>
+              </ul>
+              <a
+                href="#"
+                class="block text-center bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 font-semibold py-3.5 rounded-xl transition-all duration-200 text-sm"
+                >Contact sales</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="testimonials"
+        class="py-24 lg:py-32"
+        aria-labelledby="testimonials-heading"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-2xl mx-auto mb-16">
+            <div
+              data-aos="fade-up"
+              class="inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-semibold px-4 py-2 rounded-full mb-5"
+            >
+              <i
+                data-lucide="message-square"
+                class="w-3.5 h-3.5"
+                aria-hidden="true"
+              ></i>
+              Customer love
+            </div>
+            <h2
+              id="testimonials-heading"
+              data-aos="fade-up"
+              data-aos-delay="100"
+              class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
+            >
+              Trusted by teams that
+              <span class="gradient-text">get things done</span>
+            </h2>
+            <p
+              data-aos="fade-up"
+              data-aos-delay="200"
+              class="text-lg text-gray-600 dark:text-gray-400"
+            >
+              Don't take our word for it — hear from the teams actually using
+              FlowSync every day.
+            </p>
+          </div>
+
+          <div
+            data-aos="fade-up"
+            data-aos-delay="200"
+            class="swiper testimonials-swiper"
+            role="region"
+            aria-label="Customer testimonials"
+          >
+            <div class="swiper-wrapper pb-12">
+              <div class="swiper-slide">
+                <blockquote
+                  class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-8 shadow-sm mx-2"
+                >
+                  <div
+                    class="flex gap-1 mb-4"
+                    role="img"
+                    aria-label="5 star rating"
+                  >
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                  <p
+                    class="text-gray-700 dark:text-gray-300 leading-relaxed text-base mb-6"
+                  >
+                    "FlowSync completely transformed how our engineering team
+                    ships. We reduced our average cycle time from 14 days to 6
+                    days within the first month. The AI sprint planning alone is
+                    worth the price."
+                  </p>
+                  <footer class="flex items-center gap-4">
+                    <div
+                      class="w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      SK
+                    </div>
+                    <div>
+                      <cite
+                        class="not-italic font-bold text-gray-900 dark:text-white text-sm"
+                        >Sarah Kim</cite
+                      >
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        VP of Engineering, Techwave
+                      </div>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+
+              <div class="swiper-slide">
+                <blockquote
+                  class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-8 shadow-sm mx-2"
+                >
+                  <div
+                    class="flex gap-1 mb-4"
+                    role="img"
+                    aria-label="5 star rating"
+                  >
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                  <p
+                    class="text-gray-700 dark:text-gray-300 leading-relaxed text-base mb-6"
+                  >
+                    "I've tried every project management tool out there.
+                    FlowSync is the first one that actually stuck with our team.
+                    The Slack integration is seamless and the real-time
+                    analytics are genuinely useful, not just pretty charts."
+                  </p>
+                  <footer class="flex items-center gap-4">
+                    <div
+                      class="w-11 h-11 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      MR
+                    </div>
+                    <div>
+                      <cite
+                        class="not-italic font-bold text-gray-900 dark:text-white text-sm"
+                        >Marcus Rivera</cite
+                      >
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        Head of Product, Orbitex
+                      </div>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+
+              <div class="swiper-slide">
+                <blockquote
+                  class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-8 shadow-sm mx-2"
+                >
+                  <div
+                    class="flex gap-1 mb-4"
+                    role="img"
+                    aria-label="5 star rating"
+                  >
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                  <p
+                    class="text-gray-700 dark:text-gray-300 leading-relaxed text-base mb-6"
+                  >
+                    "Our marketing team went from missed deadlines to
+                    consistently delivering on time. The workflow automation
+                    handles all the repetitive handoffs and our whole team
+                    actually enjoys using it — which is saying something."
+                  </p>
+                  <footer class="flex items-center gap-4">
+                    <div
+                      class="w-11 h-11 rounded-full bg-gradient-to-br from-rose-400 to-pink-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      JP
+                    </div>
+                    <div>
+                      <cite
+                        class="not-italic font-bold text-gray-900 dark:text-white text-sm"
+                        >Jamie Park</cite
+                      >
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        Marketing Director, Prismio
+                      </div>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+
+              <div class="swiper-slide">
+                <blockquote
+                  class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-8 shadow-sm mx-2"
+                >
+                  <div
+                    class="flex gap-1 mb-4"
+                    role="img"
+                    aria-label="5 star rating"
+                  >
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                  <p
+                    class="text-gray-700 dark:text-gray-300 leading-relaxed text-base mb-6"
+                  >
+                    "We scaled from 8 to 60 people and FlowSync scaled with us
+                    perfectly. The enterprise security features gave our legal
+                    team confidence, and the custom reporting saves our
+                    executives hours every week."
+                  </p>
+                  <footer class="flex items-center gap-4">
+                    <div
+                      class="w-11 h-11 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      AL
+                    </div>
+                    <div>
+                      <cite
+                        class="not-italic font-bold text-gray-900 dark:text-white text-sm"
+                        >Aisha Lawson</cite
+                      >
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        COO, Nexlify
+                      </div>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+
+              <div class="swiper-slide">
+                <blockquote
+                  class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-8 shadow-sm mx-2"
+                >
+                  <div
+                    class="flex gap-1 mb-4"
+                    role="img"
+                    aria-label="5 star rating"
+                  >
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      data-lucide="star"
+                      class="w-4 h-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                  <p
+                    class="text-gray-700 dark:text-gray-300 leading-relaxed text-base mb-6"
+                  >
+                    "The customer support is unreal. Any question I had during
+                    onboarding was answered in under 5 minutes. The tool itself
+                    is brilliant, but that level of care for customers is what
+                    made us true believers."
+                  </p>
+                  <footer class="flex items-center gap-4">
+                    <div
+                      class="w-11 h-11 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      TC
+                    </div>
+                    <div>
+                      <cite
+                        class="not-italic font-bold text-gray-900 dark:text-white text-sm"
+                        >Tom Chen</cite
+                      >
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        Founder, Cubeworks
+                      </div>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+            </div>
+            <div
+              class="swiper-pagination"
+              role="tablist"
+              aria-label="Testimonial navigation"
+            ></div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="faq"
+        class="py-24 lg:py-32 bg-gray-50 dark:bg-gray-900/50"
+        aria-labelledby="faq-heading"
+      >
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <div
+              data-aos="fade-up"
+              class="inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-semibold px-4 py-2 rounded-full mb-5"
+            >
+              <i
+                data-lucide="help-circle"
+                class="w-3.5 h-3.5"
+                aria-hidden="true"
+              ></i>
+              Got questions?
+            </div>
+            <h2
+              id="faq-heading"
+              data-aos="fade-up"
+              data-aos-delay="100"
+              class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
+            >
+              Frequently asked <span class="gradient-text">questions</span>
+            </h2>
+            <p
+              data-aos="fade-up"
+              data-aos-delay="200"
+              class="text-lg text-gray-600 dark:text-gray-400"
+            >
+              Everything you need to know. Can't find the answer?
+              <a
+                href="#"
+                class="text-primary-600 hover:text-primary-700 font-semibold"
+                >Chat with us.</a
+              >
+            </p>
+          </div>
+
+          <div
+            data-aos="fade-up"
+            data-aos-delay="200"
+            class="flex flex-col gap-3"
+          >
+            <div
+              x-data="{open:false}"
+              class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden transition-all duration-200"
+            >
+              <button
+                @click="open=!open"
+                class="w-full flex items-center justify-between px-7 py-5 text-left"
+                :aria-expanded="open.toString()"
+              >
+                <span class="font-semibold text-gray-900 dark:text-white pr-4"
+                  >Is there a free trial? Do I need a credit card?</span
+                >
+                <i
+                  data-lucide="plus"
+                  class="w-5 h-5 text-primary-600 flex-shrink-0 transition-transform duration-200"
+                  :class="open?'rotate-45':''"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              <div x-show="open" x-collapse x-cloak>
+                <div
+                  class="px-7 pb-6 text-gray-600 dark:text-gray-400 text-sm leading-relaxed border-t border-gray-100 dark:border-gray-800 pt-4"
+                >
+                  Yes — all plans come with a 14-day free trial with full access
+                  to every feature. No credit card required to start. If you
+                  decide FlowSync isn't right for you, just walk away. No
+                  charges, no questions asked.
+                </div>
+              </div>
+            </div>
+
+            <div
+              x-data="{open:false}"
+              class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden transition-all duration-200"
+            >
+              <button
+                @click="open=!open"
+                class="w-full flex items-center justify-between px-7 py-5 text-left"
+                :aria-expanded="open.toString()"
+              >
+                <span class="font-semibold text-gray-900 dark:text-white pr-4"
+                  >Can I switch plans or cancel at any time?</span
+                >
+                <i
+                  data-lucide="plus"
+                  class="w-5 h-5 text-primary-600 flex-shrink-0 transition-transform duration-200"
+                  :class="open?'rotate-45':''"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              <div x-show="open" x-collapse x-cloak>
+                <div
+                  class="px-7 pb-6 text-gray-600 dark:text-gray-400 text-sm leading-relaxed border-t border-gray-100 dark:border-gray-800 pt-4"
+                >
+                  Absolutely. You can upgrade, downgrade, or cancel your plan
+                  anytime from your account settings. If you cancel mid-billing
+                  period, you keep access until the end of the period. We don't
+                  do hidden fees or gotcha cancellation flows.
+                </div>
+              </div>
+            </div>
+
+            <div
+              x-data="{open:false}"
+              class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden transition-all duration-200"
+            >
+              <button
+                @click="open=!open"
+                class="w-full flex items-center justify-between px-7 py-5 text-left"
+                :aria-expanded="open.toString()"
+              >
+                <span class="font-semibold text-gray-900 dark:text-white pr-4"
+                  >How does the AI co-pilot work?</span
+                >
+                <i
+                  data-lucide="plus"
+                  class="w-5 h-5 text-primary-600 flex-shrink-0 transition-transform duration-200"
+                  :class="open?'rotate-45':''"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              <div x-show="open" x-collapse x-cloak>
+                <div
+                  class="px-7 pb-6 text-gray-600 dark:text-gray-400 text-sm leading-relaxed border-t border-gray-100 dark:border-gray-800 pt-4"
+                >
+                  The AI co-pilot learns from your team's patterns over time. It
+                  can auto-summarize long comment threads, suggest task
+                  assignments based on workload, draft status update reports,
+                  flag potential blockers before they escalate, and much more.
+                  It's available on the Pro and Enterprise plans.
+                </div>
+              </div>
+            </div>
+
+            <div
+              x-data="{open:false}"
+              class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden transition-all duration-200"
+            >
+              <button
+                @click="open=!open"
+                class="w-full flex items-center justify-between px-7 py-5 text-left"
+                :aria-expanded="open.toString()"
+              >
+                <span class="font-semibold text-gray-900 dark:text-white pr-4"
+                  >Is my data secure? Where is it stored?</span
+                >
+                <i
+                  data-lucide="plus"
+                  class="w-5 h-5 text-primary-600 flex-shrink-0 transition-transform duration-200"
+                  :class="open?'rotate-45':''"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              <div x-show="open" x-collapse x-cloak>
+                <div
+                  class="px-7 pb-6 text-gray-600 dark:text-gray-400 text-sm leading-relaxed border-t border-gray-100 dark:border-gray-800 pt-4"
+                >
+                  FlowSync is SOC 2 Type II certified and GDPR compliant. All
+                  data is encrypted in transit (TLS 1.3) and at rest (AES-256).
+                  We operate on AWS infrastructure with data centers in the US
+                  and EU. Enterprise customers can choose their preferred data
+                  residency region.
+                </div>
+              </div>
+            </div>
+
+            <div
+              x-data="{open:false}"
+              class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden transition-all duration-200"
+            >
+              <button
+                @click="open=!open"
+                class="w-full flex items-center justify-between px-7 py-5 text-left"
+                :aria-expanded="open.toString()"
+              >
+                <span class="font-semibold text-gray-900 dark:text-white pr-4"
+                  >What integrations does FlowSync support?</span
+                >
+                <i
+                  data-lucide="plus"
+                  class="w-5 h-5 text-primary-600 flex-shrink-0 transition-transform duration-200"
+                  :class="open?'rotate-45':''"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              <div x-show="open" x-collapse x-cloak>
+                <div
+                  class="px-7 pb-6 text-gray-600 dark:text-gray-400 text-sm leading-relaxed border-t border-gray-100 dark:border-gray-800 pt-4"
+                >
+                  We natively integrate with 200+ tools including Slack, GitHub,
+                  GitLab, Jira, Salesforce, HubSpot, Intercom, Notion, Figma,
+                  Google Workspace, Microsoft 365, and many more. We also
+                  support Zapier and Make for custom workflows, and provide a
+                  REST API for bespoke integrations.
+                </div>
+              </div>
+            </div>
+
+            <div
+              x-data="{open:false}"
+              class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden transition-all duration-200"
+            >
+              <button
+                @click="open=!open"
+                class="w-full flex items-center justify-between px-7 py-5 text-left"
+                :aria-expanded="open.toString()"
+              >
+                <span class="font-semibold text-gray-900 dark:text-white pr-4"
+                  >Do you offer discounts for nonprofits or startups?</span
+                >
+                <i
+                  data-lucide="plus"
+                  class="w-5 h-5 text-primary-600 flex-shrink-0 transition-transform duration-200"
+                  :class="open?'rotate-45':''"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              <div x-show="open" x-collapse x-cloak>
+                <div
+                  class="px-7 pb-6 text-gray-600 dark:text-gray-400 text-sm leading-relaxed border-t border-gray-100 dark:border-gray-800 pt-4"
+                >
+                  Yes! We offer a 50% discount for verified nonprofits and
+                  educational institutions. Early-stage startups (under $1M ARR)
+                  can apply to our startup program for 6 months of Pro at no
+                  cost.
+                  <a
+                    href="#"
+                    class="text-primary-600 hover:text-primary-700 font-semibold"
+                    >Contact us to apply.</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-24 lg:py-32" aria-labelledby="cta-heading">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            data-aos="fade-up"
+            class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 rounded-3xl px-8 py-20 text-center overflow-hidden"
+          >
+            <div
+              class="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full translate-x-1/3 translate-y-1/3"
+              aria-hidden="true"
+            ></div>
+            <div
+              class="absolute top-1/2 left-1/4 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2"
+              aria-hidden="true"
+            ></div>
+            <div class="relative">
+              <h2
+                id="cta-heading"
+                class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6 leading-tight"
+              >
+                Start shipping faster<br />today — for free
+              </h2>
+              <p class="text-primary-100 text-lg max-w-xl mx-auto mb-10">
+                Join 12,000+ teams who use FlowSync to cut cycle time in half.
+                No card required. Cancel anytime.
+              </p>
+              <div
+                class="flex flex-col sm:flex-row items-center justify-center gap-4"
+              >
+                <a
+                  href="#pricing"
+                  class="group inline-flex items-center gap-2 bg-white text-primary-700 hover:bg-gray-50 font-bold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 w-full sm:w-auto justify-center"
+                >
+                  Start your free trial
+                  <i
+                    data-lucide="arrow-right"
+                    class="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    aria-hidden="true"
+                  ></i>
+                </a>
+                <a
+                  href="#"
+                  class="inline-flex items-center gap-2 text-primary-100 hover:text-white font-semibold text-base px-8 py-4 rounded-xl border border-primary-400/50 hover:border-white/50 transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto justify-center"
+                >
+                  <i
+                    data-lucide="calendar"
+                    class="w-4 h-4"
+                    aria-hidden="true"
+                  ></i>
+                  Book a demo
+                </a>
+              </div>
+              <p class="text-primary-200 text-sm mt-8">
+                14-day free trial · No credit card · Cancel anytime
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-gray-950 text-gray-400 pt-20 pb-10" role="contentinfo">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 pb-16 border-b border-gray-800"
+        >
+          <div class="col-span-2">
+            <a
+              href="#"
+              class="flex items-center gap-2.5 mb-5"
+              aria-label="FlowSync Home"
+            >
+              <div
+                class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center"
+                aria-hidden="true"
+              >
+                <i data-lucide="zap" class="w-4 h-4 text-white"></i>
+              </div>
+              <span class="text-xl font-bold text-white tracking-tight"
+                >Flow<span class="text-primary-400">Sync</span></span
+              >
+            </a>
+            <p class="text-sm text-gray-500 leading-relaxed mb-6 max-w-xs">
+              The modern workspace for high-performing teams. Automate the busy
+              work, focus on what ships.
+            </p>
+            <div class="flex items-center gap-3">
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg bg-gray-800 hover:bg-primary-600/20 border border-gray-700 hover:border-primary-600/50 flex items-center justify-center transition-all duration-200"
+                aria-label="Twitter / X"
+              >
+                <i data-lucide="twitter" class="w-4 h-4" aria-hidden="true"></i>
+              </a>
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg bg-gray-800 hover:bg-primary-600/20 border border-gray-700 hover:border-primary-600/50 flex items-center justify-center transition-all duration-200"
+                aria-label="LinkedIn"
+              >
+                <i
+                  data-lucide="linkedin"
+                  class="w-4 h-4"
+                  aria-hidden="true"
+                ></i>
+              </a>
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg bg-gray-800 hover:bg-primary-600/20 border border-gray-700 hover:border-primary-600/50 flex items-center justify-center transition-all duration-200"
+                aria-label="GitHub"
+              >
+                <i data-lucide="github" class="w-4 h-4" aria-hidden="true"></i>
+              </a>
+              <a
+                href="#"
+                class="w-9 h-9 rounded-lg bg-gray-800 hover:bg-primary-600/20 border border-gray-700 hover:border-primary-600/50 flex items-center justify-center transition-all duration-200"
+                aria-label="YouTube"
+              >
+                <i data-lucide="youtube" class="w-4 h-4" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+
+          <nav aria-label="Product links">
+            <h3 class="text-white text-sm font-semibold mb-5">Product</h3>
+            <ul class="flex flex-col gap-3 text-sm">
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Pricing</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Changelog</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Roadmap</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Status</a
+                >
+              </li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Solutions links">
+            <h3 class="text-white text-sm font-semibold mb-5">Solutions</h3>
+            <ul class="flex flex-col gap-3 text-sm">
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Engineering</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Marketing</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Design</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Operations</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Enterprise</a
+                >
+              </li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Resources links">
+            <h3 class="text-white text-sm font-semibold mb-5">Resources</h3>
+            <ul class="flex flex-col gap-3 text-sm">
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Documentation</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors">Blog</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Guides</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >API Reference</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Community</a
+                >
+              </li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Company links">
+            <h3 class="text-white text-sm font-semibold mb-5">Company</h3>
+            <ul class="flex flex-col gap-3 text-sm">
+              <li>
+                <a href="#" class="hover:text-white transition-colors">About</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Careers
+                  <span
+                    class="ml-1 text-xs bg-primary-600/30 text-primary-400 border border-primary-600/30 rounded-full px-2 py-0.5"
+                    >Hiring</span
+                  ></a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors">Press</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Partners</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors"
+                  >Contact</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div
+          class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600"
+        >
+          <p>© 2025 FlowSync, Inc. All rights reserved.</p>
+          <nav class="flex items-center gap-6" aria-label="Legal links">
+            <a href="#" class="hover:text-gray-400 transition-colors"
+              >Privacy Policy</a
+            >
+            <a href="#" class="hover:text-gray-400 transition-colors"
+              >Terms of Service</a
+            >
+            <a href="#" class="hover:text-gray-400 transition-colors"
+              >Cookie Policy</a
+            >
+            <a href="#" class="hover:text-gray-400 transition-colors"
+              >Security</a
+            >
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+    <div
+      id="sticky-cta"
+      class="fixed bottom-0 inset-x-0 z-40 hidden md:block"
+      aria-live="polite"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
+        <div
+          class="bg-gray-900 dark:bg-gray-950 border border-gray-700 dark:border-gray-800 rounded-2xl px-6 py-4 flex items-center justify-between gap-6 shadow-2xl shadow-black/40"
+        >
+          <div class="flex items-center gap-4 min-w-0">
+            <div
+              class="w-9 h-9 rounded-lg bg-primary-600 flex items-center justify-center flex-shrink-0"
+              aria-hidden="true"
+            >
+              <i data-lucide="zap" class="w-4 h-4 text-white"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-white font-semibold text-sm truncate">
+                Start your free 14-day trial today
+              </p>
+              <p class="text-gray-400 text-xs">
+                No credit card required · Cancel anytime
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 flex-shrink-0">
+            <a
+              href="#pricing"
+              class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-primary-600/30 hover:-translate-y-0.5"
+            >
+              Get started free
+              <i
+                data-lucide="arrow-right"
+                class="w-4 h-4"
+                aria-hidden="true"
+              ></i>
+            </a>
+            <button
+              id="sticky-cta-close"
+              class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+              aria-label="Dismiss banner"
+            >
+              <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      id="chat-btn"
+      class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full flex items-center justify-center shadow-xl shadow-primary-600/40"
+      aria-label="Open live chat"
+      aria-haspopup="dialog"
+    >
+      <i data-lucide="message-circle" class="w-6 h-6" aria-hidden="true"></i>
+    </button>
+
+    <script src="js/index.js"></script>
+  </body>
+</html>
