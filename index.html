@@ -58,6 +58,15 @@
               },
             },
             fontFamily: { sans: ["Inter", "system-ui", "sans-serif"] },
+            keyframes: {
+              "count-in": {
+                "0%": { opacity: "0", transform: "translateY(10px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+            },
+            animation: {
+              "count-in": "count-in 0.5s ease forwards",
+            },
           },
         },
       };
@@ -69,155 +78,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-
-    <style>
-      [x-cloak] {
-        display: none !important;
-      }
-      .swiper-pagination-bullet-active {
-        background: #7c3aed !important;
-      }
-      .gradient-text {
-        background: linear-gradient(135deg, #7c3aed, #a78bfa, #38bdf8);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      .hero-glow {
-        background: radial-gradient(
-          ellipse 80% 60% at 50% -10%,
-          rgba(124, 58, 237, 0.35) 0%,
-          transparent 70%
-        );
-      }
-      .dashboard-glow {
-        filter: drop-shadow(0 30px 60px rgba(124, 58, 237, 0.4));
-      }
-
-      #scroll-progress {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 3px;
-        width: 0%;
-        background: linear-gradient(90deg, #7c3aed, #a78bfa, #38bdf8);
-        z-index: 9999;
-        will-change: width;
-        pointer-events: none;
-        transition: none;
-      }
-
-      .mesh-blob {
-        position: absolute;
-        border-radius: 9999px;
-        pointer-events: none;
-        filter: blur(52px);
-      }
-      .mesh-blob-1 {
-        width: 560px;
-        height: 560px;
-        top: -180px;
-        left: -80px;
-        background: radial-gradient(
-          circle,
-          rgba(124, 58, 237, 0.18) 0%,
-          transparent 65%
-        );
-      }
-      .mesh-blob-2 {
-        width: 480px;
-        height: 480px;
-        top: 40px;
-        right: -140px;
-        background: radial-gradient(
-          circle,
-          rgba(56, 189, 248, 0.14) 0%,
-          transparent 65%
-        );
-      }
-      .mesh-blob-3 {
-        width: 400px;
-        height: 400px;
-        bottom: 0;
-        left: 32%;
-        background: radial-gradient(
-          circle,
-          rgba(167, 139, 250, 0.12) 0%,
-          transparent 65%
-        );
-      }
-
-      .feature-card {
-        transition:
-          transform 0.3s ease,
-          box-shadow 0.3s ease;
-        transform: translateZ(0);
-        will-change: transform;
-      }
-      .feature-card:hover {
-        transform: translateZ(0) translateY(-6px) scale(1.01);
-        box-shadow:
-          0 0 0 1px rgba(124, 58, 237, 0.25),
-          0 24px 48px -12px rgba(124, 58, 237, 0.22);
-      }
-      .feature-card:hover .card-icon {
-        transform: translateY(-3px) scale(1.12);
-      }
-      .card-icon {
-        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        will-change: transform;
-      }
-
-      #sticky-cta {
-        transform: translateY(100%);
-        opacity: 0;
-        pointer-events: none;
-        transition:
-          transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-          opacity 0.4s ease;
-      }
-      #sticky-cta.cta-visible {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      #chat-btn {
-        transition:
-          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-          box-shadow 0.3s ease;
-        will-change: transform;
-      }
-      #chat-btn:hover {
-        transform: scale(1.1) translateY(-2px);
-        box-shadow: 0 20px 40px -8px rgba(124, 58, 237, 0.55);
-      }
-      #chat-btn:active {
-        transform: scale(0.97);
-      }
-      #chat-btn:focus-visible {
-        outline: 3px solid rgba(124, 58, 237, 0.5);
-        outline-offset: 3px;
-      }
-
-      @keyframes count-in {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .counter-animate {
-        animation: count-in 0.5s ease forwards;
-      }
-    </style>
   </head>
 
   <body
-    class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased"
+    class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased overflow-x-hidden"
     x-data="{
     darkMode: document.documentElement.classList.contains('dark'),
     toggleDark(){
@@ -234,6 +98,7 @@
   >
     <div
       id="scroll-progress"
+      class="fixed top-0 left-0 h-[3px] w-0 bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#38bdf8] z-[9999] will-change-[width] pointer-events-none"
       role="progressbar"
       aria-label="Page reading progress"
       aria-valuemin="0"
@@ -462,12 +327,21 @@
         aria-labelledby="hero-headline"
       >
         <div
-          class="hero-glow absolute inset-0 pointer-events-none"
+          class="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(124,58,237,0.35)_0%,transparent_70%)]"
           aria-hidden="true"
         ></div>
-        <div class="mesh-blob mesh-blob-1" aria-hidden="true"></div>
-        <div class="mesh-blob mesh-blob-2" aria-hidden="true"></div>
-        <div class="mesh-blob mesh-blob-3" aria-hidden="true"></div>
+        <div
+          class="absolute rounded-[9999px] pointer-events-none blur-[52px] w-[280px] h-[280px] -top-[100px] -left-[30px] md:w-[560px] md:h-[560px] md:-top-[180px] md:-left-[80px] bg-[radial-gradient(circle,rgba(124,58,237,0.18)_0%,transparent_65%)]"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="absolute rounded-[9999px] pointer-events-none blur-[52px] w-[240px] h-[240px] top-[20px] -right-[60px] md:w-[480px] md:h-[480px] md:top-[40px] md:-right-[140px] bg-[radial-gradient(circle,rgba(56,189,248,0.14)_0%,transparent_65%)]"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="absolute rounded-[9999px] pointer-events-none blur-[52px] w-[200px] h-[200px] bottom-0 left-[20%] md:w-[400px] md:h-[400px] md:left-[32%] bg-[radial-gradient(circle,rgba(167,139,250,0.12)_0%,transparent_65%)]"
+          aria-hidden="true"
+        ></div>
         <div
           class="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"
           aria-hidden="true"
@@ -501,7 +375,10 @@
               class="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6"
             >
               The smarter way to<br />
-              <span class="gradient-text">run your business</span>
+              <span
+                class="bg-[linear-gradient(135deg,#7c3aed,#a78bfa,#38bdf8)] bg-clip-text text-transparent"
+                >run your business</span
+              >
             </h1>
 
             <p
@@ -620,7 +497,7 @@
               class="relative"
             >
               <div
-                class="dashboard-glow rounded-2xl overflow-hidden border border-gray-200/50 dark:border-white/10 shadow-2xl"
+                class="drop-shadow-[0_30px_60px_rgb(124_58_237_/_0.4)] rounded-2xl overflow-hidden border border-gray-200/50 dark:border-white/10 shadow-2xl"
               >
                 <div class="bg-gray-900 rounded-2xl overflow-hidden">
                   <div
@@ -641,7 +518,7 @@
                     </div>
                   </div>
                   <div
-                    class="p-6 bg-gray-950 grid grid-cols-12 gap-4 min-h-[340px] sm:min-h-[420px]"
+                    class="p-6 bg-gray-950 grid grid-cols-12 gap-4 min-h-[260px] sm:min-h-[340px] md:min-h-[420px]"
                     aria-hidden="true"
                   >
                     <div class="col-span-2 hidden sm:flex flex-col gap-3">
@@ -771,7 +648,7 @@
                 </div>
               </div>
               <div
-                class="absolute -bottom-4 -left-4 sm:-left-8 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-3 shadow-xl flex items-center gap-3"
+                class="absolute -bottom-4 -left-3 sm:-left-4 md:-left-8 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-3 shadow-xl flex items-center gap-3"
                 aria-hidden="true"
               >
                 <div
@@ -792,7 +669,7 @@
                 </div>
               </div>
               <div
-                class="absolute -top-4 -right-4 sm:-right-8 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-3 shadow-xl flex items-center gap-3"
+                class="absolute -top-4 -right-3 sm:-right-4 md:-right-8 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-3 shadow-xl flex items-center gap-3"
                 aria-hidden="true"
               >
                 <div
@@ -976,7 +853,10 @@
               class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
             >
               Built for the way
-              <span class="gradient-text">teams actually work</span>
+              <span
+                class="bg-[linear-gradient(135deg,#7c3aed,#a78bfa,#38bdf8)] bg-clip-text text-transparent"
+                >teams actually work</span
+              >
             </h2>
             <p
               data-aos="fade-up"
@@ -992,10 +872,10 @@
             <article
               data-aos="fade-up"
               data-aos-delay="0"
-              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+              class="group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(124_58_237_/_0.25),0_24px_48px_-12px_rgb(124_58_237_/_0.22)]"
             >
               <div
-                class="card-icon w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center mb-5"
+                class="w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center mb-5 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-[3px] group-hover:scale-[1.12]"
               >
                 <i
                   data-lucide="zap"
@@ -1015,10 +895,10 @@
             <article
               data-aos="fade-up"
               data-aos-delay="80"
-              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+              class="group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(124_58_237_/_0.25),0_24px_48px_-12px_rgb(124_58_237_/_0.22)]"
             >
               <div
-                class="card-icon w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/40 flex items-center justify-center mb-5"
+                class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/40 flex items-center justify-center mb-5 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-[3px] group-hover:scale-[1.12]"
               >
                 <i
                   data-lucide="bar-chart-2"
@@ -1038,10 +918,10 @@
             <article
               data-aos="fade-up"
               data-aos-delay="160"
-              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+              class="group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(124_58_237_/_0.25),0_24px_48px_-12px_rgb(124_58_237_/_0.22)]"
             >
               <div
-                class="card-icon w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/40 flex items-center justify-center mb-5"
+                class="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/40 flex items-center justify-center mb-5 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-[3px] group-hover:scale-[1.12]"
               >
                 <i
                   data-lucide="users"
@@ -1061,10 +941,10 @@
             <article
               data-aos="fade-up"
               data-aos-delay="0"
-              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+              class="group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(124_58_237_/_0.25),0_24px_48px_-12px_rgb(124_58_237_/_0.22)]"
             >
               <div
-                class="card-icon w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/40 flex items-center justify-center mb-5"
+                class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/40 flex items-center justify-center mb-5 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-[3px] group-hover:scale-[1.12]"
               >
                 <i
                   data-lucide="shield"
@@ -1084,10 +964,10 @@
             <article
               data-aos="fade-up"
               data-aos-delay="80"
-              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+              class="group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(124_58_237_/_0.25),0_24px_48px_-12px_rgb(124_58_237_/_0.22)]"
             >
               <div
-                class="card-icon w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-900/40 flex items-center justify-center mb-5"
+                class="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-900/40 flex items-center justify-center mb-5 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-[3px] group-hover:scale-[1.12]"
               >
                 <i
                   data-lucide="plug"
@@ -1107,10 +987,10 @@
             <article
               data-aos="fade-up"
               data-aos-delay="160"
-              class="feature-card bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7"
+              class="group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(124_58_237_/_0.25),0_24px_48px_-12px_rgb(124_58_237_/_0.22)]"
             >
               <div
-                class="card-icon w-12 h-12 rounded-xl bg-cyan-50 dark:bg-cyan-900/40 flex items-center justify-center mb-5"
+                class="w-12 h-12 rounded-xl bg-cyan-50 dark:bg-cyan-900/40 flex items-center justify-center mb-5 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-[3px] group-hover:scale-[1.12]"
               >
                 <i
                   data-lucide="cpu"
@@ -1150,7 +1030,11 @@
               data-aos-delay="100"
               class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
             >
-              Up and running <span class="gradient-text">in minutes</span>
+              Up and running
+              <span
+                class="bg-[linear-gradient(135deg,#7c3aed,#a78bfa,#38bdf8)] bg-clip-text text-transparent"
+                >in minutes</span
+              >
             </h2>
             <p
               data-aos="fade-up"
@@ -1250,7 +1134,9 @@
                   class="rounded-xl overflow-hidden bg-gray-950 p-5"
                   aria-hidden="true"
                 >
-                  <div class="grid grid-cols-3 gap-3 min-h-[300px]">
+                  <div
+                    class="grid grid-cols-3 gap-3 min-h-[260px] sm:min-h-[300px]"
+                  >
                     <div class="bg-gray-800/50 rounded-xl p-3">
                       <div
                         class="text-xs font-semibold text-gray-400 mb-3 flex items-center justify-between"
@@ -1386,7 +1272,10 @@
                   class="text-4xl sm:text-5xl font-black tracking-tight mb-6 leading-tight"
                 >
                   Visualize your work,
-                  <span class="gradient-text">ship on time</span>
+                  <span
+                    class="bg-[linear-gradient(135deg,#7c3aed,#a78bfa,#38bdf8)] bg-clip-text text-transparent"
+                    >ship on time</span
+                  >
                 </h2>
                 <p
                   class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8"
@@ -1413,30 +1302,8 @@
                       <p
                         class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"
                       >
-                        Switch between Kanban, Table, Timeline, and Calendar
-                        views instantly.
-                      </p>
-                    </div>
-                  </li>
-                  <li class="flex items-start gap-3">
-                    <div
-                      class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center flex-shrink-0 mt-0.5"
-                      aria-hidden="true"
-                    >
-                      <i
-                        data-lucide="check"
-                        class="w-3.5 h-3.5 text-primary-600 dark:text-primary-400"
-                      ></i>
-                    </div>
-                    <div>
-                      <span class="font-semibold text-gray-900 dark:text-white"
-                        >AI sprint planning</span
-                      >
-                      <p
-                        class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"
-                      >
-                        Let AI estimate task complexity and auto-assign work
-                        based on team velocity.
+                        Kanban, list, timeline, calendar, and Gantt — switch
+                        instantly.
                       </p>
                     </div>
                   </li>
@@ -1503,7 +1370,10 @@
               class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
             >
               Invest in your team's
-              <span class="gradient-text">productivity</span>
+              <span
+                class="bg-[linear-gradient(135deg,#7c3aed,#a78bfa,#38bdf8)] bg-clip-text text-transparent"
+                >productivity</span
+              >
             </h2>
             <p
               data-aos="fade-up"
@@ -1547,7 +1417,7 @@
             <div
               data-aos="fade-up"
               data-aos-delay="0"
-              class="feature-card bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 flex flex-col"
+              class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 flex flex-col transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(124_58_237_/_0.25),0_24px_48px_-12px_rgb(124_58_237_/_0.22)]"
             >
               <div class="mb-8">
                 <h3
@@ -1657,7 +1527,7 @@
             <div
               data-aos="fade-up"
               data-aos-delay="100"
-              class="relative feature-card bg-primary-600 border-2 border-primary-500 rounded-2xl p-8 flex flex-col shadow-2xl shadow-primary-600/30"
+              class="relative group bg-primary-600 border-2 border-primary-500 rounded-2xl p-8 flex flex-col shadow-2xl shadow-primary-600/30 transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(255_255_255_/_0.25),0_24px_48px_-12px_rgb(255_255_255_/_0.22)]"
             >
               <div
                 class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-orange-400 text-gray-900 text-xs font-black uppercase tracking-widest px-5 py-1.5 rounded-full shadow-lg whitespace-nowrap"
@@ -1755,7 +1625,7 @@
             <div
               data-aos="fade-up"
               data-aos-delay="200"
-              class="feature-card bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 flex flex-col"
+              class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 flex flex-col transition-[transform_0.3s_ease,box-shadow_0.3s_ease] hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgb(124_58_237_/_0.25),0_24px_48px_-12px_rgb(124_58_237_/_0.22)]"
             >
               <div class="mb-8">
                 <h3
@@ -1886,7 +1756,10 @@
               class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
             >
               Trusted by teams that
-              <span class="gradient-text">get things done</span>
+              <span
+                class="bg-[linear-gradient(135deg,#7c3aed,#a78bfa,#38bdf8)] bg-clip-text text-transparent"
+                >get things done</span
+              >
             </h2>
             <p
               data-aos="fade-up"
@@ -2254,7 +2127,11 @@
               data-aos-delay="100"
               class="text-4xl sm:text-5xl font-black tracking-tight mb-5"
             >
-              Frequently asked <span class="gradient-text">questions</span>
+              Frequently asked
+              <span
+                class="bg-[linear-gradient(135deg,#7c3aed,#a78bfa,#38bdf8)] bg-clip-text text-transparent"
+                >questions</span
+              >
             </h2>
             <p
               data-aos="fade-up"
@@ -2744,7 +2621,7 @@
 
     <div
       id="sticky-cta"
-      class="fixed bottom-0 inset-x-0 z-40 hidden md:block"
+      class="fixed bottom-0 inset-x-0 z-40 hidden md:block translate-y-full opacity-0 pointer-events-none transition-[transform_0.4s_cubic-bezier(0.16,1,0.3,1),opacity_0.4s_ease]"
       aria-live="polite"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
@@ -2793,7 +2670,7 @@
 
     <button
       id="chat-btn"
-      class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full flex items-center justify-center shadow-xl shadow-primary-600/40"
+      class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full flex items-center justify-center shadow-xl shadow-primary-600/40 transition-[transform_0.3s_cubic-bezier(0.34,1.56,0.64,1),box-shadow_0.3s_ease] will-change-transform hover:scale-[1.1] hover:-translate-y-[2px] hover:shadow-[0_20px_40px_-8px_rgb(124_58_237_/_0.55)] active:scale-[0.97] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[rgba(124,58,237,0.5)] focus-visible:outline-offset-[3px]"
       aria-label="Open live chat"
       aria-haspopup="dialog"
     >

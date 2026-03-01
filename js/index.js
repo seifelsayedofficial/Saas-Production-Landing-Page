@@ -1,80 +1,106 @@
 (function () {
-  var bar = document.getElementById("scroll-progress");
-  var rafPending = false;
+  const bar = document.getElementById("scroll-progress");
+  const stickyCta = document.getElementById("sticky-cta");
+  const ctaClose = document.getElementById("sticky-cta-close");
+
+  let rafPending = false;
+  let ctaDismissed = false;
+  let ctaShown = false;
 
   function updateBar() {
-    var s = window.scrollY || 0;
-    var h =
+    if (!bar) return;
+    const s = window.scrollY || 0;
+    const h =
       document.documentElement.scrollHeight -
       document.documentElement.clientHeight;
-    var p = h > 0 ? Math.min(100, (s / h) * 100) : 0;
-    bar.style.width = p + "%";
+    const p = h > 0 ? Math.min(100, (s / h) * 100) : 0;
+    bar.style.width = `${p}%`;
     bar.setAttribute("aria-valuenow", Math.round(p));
-    rafPending = false;
   }
-
-  window.addEventListener(
-    "scroll",
-    function () {
-      if (!rafPending) {
-        rafPending = true;
-        requestAnimationFrame(updateBar);
-      }
-    },
-    { passive: true },
-  );
-
-  var stickyCta = document.getElementById("sticky-cta");
-  var ctaClose = document.getElementById("sticky-cta-close");
-  var ctaDismissed = false;
-  var ctaShown = false;
-  var ctaRaf = false;
 
   function updateCta() {
-    if (ctaDismissed) return;
-    var h = document.documentElement.scrollHeight - window.innerHeight;
-    var show = h > 0 && (window.scrollY / h) * 100 >= 40;
+    if (!stickyCta || ctaDismissed) return;
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const show = h > 0 && (window.scrollY / h) * 100 >= 40;
     if (show && !ctaShown) {
-      stickyCta.classList.add("cta-visible");
+      stickyCta.classList.remove(
+        "translate-y-full",
+        "opacity-0",
+        "pointer-events-none",
+      );
+      stickyCta.classList.add(
+        "translate-y-0",
+        "opacity-100",
+        "pointer-events-auto",
+      );
       ctaShown = true;
     } else if (!show && ctaShown) {
-      stickyCta.classList.remove("cta-visible");
+      stickyCta.classList.add(
+        "translate-y-full",
+        "opacity-0",
+        "pointer-events-none",
+      );
+      stickyCta.classList.remove(
+        "translate-y-0",
+        "opacity-100",
+        "pointer-events-auto",
+      );
       ctaShown = false;
     }
-    ctaRaf = false;
   }
 
+  function handleScroll() {
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(() => {
+        updateBar();
+        updateCta();
+        rafPending = false;
+      });
+    }
+  }
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
   window.addEventListener(
-    "scroll",
-    function () {
-      if (!ctaRaf) {
-        ctaRaf = true;
-        requestAnimationFrame(updateCta);
-      }
+    "resize",
+    () => {
+      if (bar) updateBar();
+      if (stickyCta && !ctaDismissed) updateCta();
     },
     { passive: true },
   );
 
   if (ctaClose) {
-    ctaClose.addEventListener("click", function () {
+    ctaClose.addEventListener("click", () => {
       ctaDismissed = true;
-      stickyCta.classList.remove("cta-visible");
-      ctaShown = false;
+      if (stickyCta) {
+        stickyCta.classList.add(
+          "translate-y-full",
+          "opacity-0",
+          "pointer-events-none",
+        );
+        stickyCta.classList.remove(
+          "translate-y-0",
+          "opacity-100",
+          "pointer-events-auto",
+        );
+        ctaShown = false;
+      }
     });
   }
 
-  var counterObserver = new IntersectionObserver(
+  const counterObserver = new IntersectionObserver(
     function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
-        var el = entry.target;
+        const el = entry.target;
         counterObserver.unobserve(el);
-        var target = parseFloat(el.getAttribute("data-target"));
-        var dur = parseInt(el.getAttribute("data-duration") || "1500", 10);
-        var suffix = el.getAttribute("data-suffix") || "";
-        var decimals = parseInt(el.getAttribute("data-decimals") || "0", 10);
-        var compact = el.getAttribute("data-format") === "compact";
-        var start = null;
+        const target = parseFloat(el.getAttribute("data-target")) || 0;
+        const dur = parseInt(el.getAttribute("data-duration") || "1500", 10);
+        const suffix = el.getAttribute("data-suffix") || "";
+        const decimals = parseInt(el.getAttribute("data-decimals") || "0", 10);
+        const compact = el.getAttribute("data-format") === "compact";
+        let start = null;
 
         function fmt(v) {
           if (compact) {
@@ -86,11 +112,11 @@
             : Math.round(v).toLocaleString();
         }
 
-        el.classList.add("counter-animate");
+        el.classList.add("animate-count-in");
         (function tick(ts) {
           if (!start) start = ts;
-          var prog = Math.min((ts - start) / dur, 1);
-          var ease = 1 - Math.pow(1 - prog, 3);
+          const prog = Math.min((ts - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - prog, 3);
           el.textContent = fmt(ease * target) + suffix;
           if (prog < 1) requestAnimationFrame(tick);
           else el.textContent = fmt(target) + suffix;
@@ -105,33 +131,41 @@
   });
 
   document.addEventListener("DOMContentLoaded", function () {
-    lucide.createIcons();
+    if (typeof lucide !== "undefined") lucide.createIcons();
 
-    AOS.init({
-      duration: 700,
-      once: true,
-      easing: "ease-out-cubic",
-      offset: 60,
-    });
+    if (typeof AOS !== "undefined") {
+      AOS.init({
+        duration: 700,
+        once: true,
+        easing: "ease-out-cubic",
+        offset: 60,
+      });
+    }
 
-    new Swiper(".testimonials-swiper", {
-      slidesPerView: 1,
-      spaceBetween: 24,
-      loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
-      pagination: { el: ".swiper-pagination", clickable: true },
-      breakpoints: {
-        640: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 },
-      },
-      a11y: {
-        prevSlideMessage: "Previous testimonial",
-        nextSlideMessage: "Next testimonial",
-      },
-    });
+    if (typeof Swiper !== "undefined") {
+      new Swiper(".testimonials-swiper", {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+          bulletActiveClass: "swiper-pagination-bullet-active !bg-primary-600",
+        },
+        breakpoints: {
+          640: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+        },
+        a11y: {
+          prevSlideMessage: "Previous testimonial",
+          nextSlideMessage: "Next testimonial",
+        },
+      });
+    }
   });
 })();
